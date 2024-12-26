@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول التمارين</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- رفع صورة الجم -->
+        <div class="gym-image-upload">
+            <label for="upload-image">رفع صورة للجم:</label>
+            <input type="file" id="upload-image" accept="image/*" onchange="loadImage(event)">
+            <div class="gym-image">
+                <img id="gym-image-preview" alt="صورة الجم" />
+            </div>
+        </div>
+
+        <div id="days-container">
+            <!-- اليوم الأول -->
+            <div class="day-section" id="day1">
+                <h2 class="day-title">اليوم الأول</h2>
+                <div class="exercise-form">
+                    <input type="text" id="exercise-name1" placeholder="اسم التمرين" />
+                    <input type="number" id="sets1" placeholder="عدد المجموعات" />
+                    <input type="number" id="reps1" placeholder="عدد التكرارات" />
+                    <button onclick="addExercise(1)">إضافة التمرين</button>
+                </div>
+                <ul id="exercise-list1" class="exercise-list"></ul>
+            </div>
+
+            <!-- اليوم الثاني -->
+            <div class="day-section" id="day2">
+                <h2 class="day-title">اليوم الثاني</h2>
+                <div class="exercise-form">
+                    <input type="text" id="exercise-name2" placeholder="اسم التمرين" />
+                    <input type="number" id="sets2" placeholder="عدد المجموعات" />
+                    <input type="number" id="reps2" placeholder="عدد التكرارات" />
+                    <button onclick="addExercise(2)">إضافة التمرين</button>
+                </div>
+                <ul id="exercise-list2" class="exercise-list"></ul>
+            </div>
+
+            <!-- اليوم الثالث -->
+            <div class="day-section" id="day3">
+                <h2 class="day-title">اليوم الثالث</h2>
+                <div class="exercise-form">
+                    <input type="text" id="exercise-name3" placeholder="اسم التمرين" />
+                    <input type="number" id="sets3" placeholder="عدد المجموعات" />
+                    <input type="number" id="reps3" placeholder="عدد التكرارات" />
+                    <button onclick="addExercise(3)">إضافة التمرين</button>
+                </div>
+                <ul id="exercise-list3" class="exercise-list"></ul>
+            </div>
+        </div>
+
+        <button class="add-day-button" onclick="addNewDay()">إضافة يوم جديد</button>
+        <button class="print-button" onclick="printExercises()">طباعة الجدول</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
