@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول التمارين</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .gym-image-upload {
+            margin-bottom: 20px;
+        }
+
+        .gym-image-upload label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .gym-image-upload input {
+            margin-bottom: 10px;
+        }
+
+        .gym-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .day-section {
+            margin-bottom: 30px;
+        }
+
+        .day-title {
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .exercise-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .exercise-form input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .exercise-form button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .exercise-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .exercise-list li {
+            font-size: 18px;
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .print-button, .add-day-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .print-button:hover, .add-day-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- رفع صورة الجم -->
+        <div class="gym-image-upload">
+            <label for="upload-image">رفع صورة للجم:</label>
+            <input type="file" id="upload-image" accept="image/*" onchange="loadImage(event)">
+            <div class="gym-image">
+                <img id="gym-image-preview" alt="صورة الجم">
+            </div>
+        </div>
+
+        <div id="days-container">
+            <!-- اليوم الأول -->
+            <div class="day-section" id="day1">
+                <h2 class="day-title">اليوم الأول</h2>
+                <div class="exercise-form">
+                    <input type="text" id="exercise-name1" placeholder="اسم التمرين">
+                    <input type="number" id="sets1" placeholder="عدد المجموعات">
+                    <input type="number" id="reps1" placeholder="عدد التكرارات">
+                    <button onclick="addExercise(1)">إضافة التمرين</button>
+                </div>
+                <ul id="exercise-list1" class="exercise-list"></ul>
+            </div>
+        </div>
+
+        <button class="add-day-button" onclick="addNewDay()">إضافة يوم جديد</button>
+        <button class="print-button" onclick="printExercises()">طباعة الجدول</button>
+    </div>
+
+    <script>
+        let dayCounter = 1; // عداد الأيام
+        const exercises = { 1: [] }; // حفظ التمارين لكل يوم
+
+        // تحميل صورة الجم
+        function loadImage(event) {
+            const imagePreview = document.getElementById("gym-image-preview");
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // إضافة تمرين جديد
+        function addExercise(day) {
+            const nameInput = document.getElementById(`exercise-name${day}`);
+            const setsInput = document.getElementById(`sets${day}`);
+            const repsInput = document.getElementById(`reps${day}`);
+            const list = document.getElementById(`exercise-list${day}`);
+
+            const name = nameInput.value.trim();
+            const sets = setsInput.value.trim();
+            const reps = repsInput.value.trim();
+
+            if (name && sets && reps) {
+                const exercise = { name, sets, reps };
+                exercises[day].push(exercise);
+
+                const li = document.createElement("li");
+                li.textContent = `${name} - ${sets}×${reps}`;
+                list.appendChild(li);
+
+                nameInput.value = '';
+                setsInput.value = '';
+                repsInput.value = '';
+            } else {
+                alert("يرجى ملء جميع الحقول!");
+            }
+        }
+
+        // إضافة يوم جديد
+        function addNewDay() {
+            dayCounter++;
+            const daysContainer = document.getElementById("days-container");
+            const newDay = document.createElement("div");
+            newDay.className = "day-section";
+            newDay.id = `day${dayCounter}`;
+            newDay.innerHTML = `
+                <h2 class="day-title">اليوم ${dayCounter}</h2>
+                <div class="exercise-form">
+                    <input type="text" id="exercise-name${dayCounter}" placeholder="اسم التمرين">
+                    <input type="number" id="sets${dayCounter}" placeholder="عدد المجموعات">
+                    <input type="number" id="reps${dayCounter}" placeholder="عدد التكرارات">
+                    <button onclick="addExercise(${dayCounter})">إضافة التمرين</button>
+                </div>
+                <ul id="exercise-list${dayCounter}" class="exercise-list"></ul>
+            `;
+            daysContainer.appendChild(newDay);
+            exercises[dayCounter] = [];
+        }
+
+        // طباعة الجدول
+        function printExercises() {
+            const printWindow = window.open('', '', 'width=800,height=600');
+            const gymImage = document.getElementById("gym-image-preview");
+            const gymImageSrc = gymImage.src;
+
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>طباعة الجدول</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        ul { list-style: none; padding: 0; font-size: 18px; }
+                        h2 { color: #007bff; font-size: 20px; margin-bottom: 10px; }
+                        img { width: 100%; height: auto; margin-bottom: 20px; }
+                    </style>
+                </head>
+                <body>
+            `);
+
+            if (gymImageSrc) {
+                printWindow.document.write(`<img src="${gymImageSrc}" alt="صورة الجم">`);
+            }
+
+            Object.keys(exercises).forEach(day => {
+                if (exercises[day].length > 0) {
+                    printWindow.document.write(`<h2>اليوم ${day}</h2>`);
+                    printWindow.document.write(`<ul>`);
+                    exercises[day].forEach(exercise => {
+                        printWindow.document.write(
+                            `<li>${exercise.name} - ${exercise.sets}×${exercise.reps}</li>`
+                        );
+                    });
+                    printWindow.document.write(`</ul>`);
+                }
+            });
+
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+</body>
+</html>
